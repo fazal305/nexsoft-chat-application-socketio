@@ -1,0 +1,15 @@
+node_modules/
+
+firebase-service-account.json
+
+.env
+
+.vscode/
+
+.DS_Store
+
+Thumbs.db
+
+npm-debug.log
+
+yarn-error.log

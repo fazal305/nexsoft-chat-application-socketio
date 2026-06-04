@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DecodeChat // Socket.io</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <section class="login-screen" id="loginScreen">
+        <div class="login-card">
+            <p class="eyebrow">DecodeLabs Internship</p>
+            <h1>Choose Test User</h1>
+            <p class="login-text">Select a user to test private chat, group chat, and online status.</p>
+
+            <div class="login-users" id="loginUsers"></div>
+        </div>
+    </section>
+
+    <main class="chat-app hidden" id="chatApp">
+        <aside class="chat-sidebar" id="chatSidebar">
+            <div class="sidebar-header">
+                <div>
+                    <p class="eyebrow">DecodeLabs</p>
+                    <h1>DecodeChat</h1>
+                </div>
+
+                <button class="sidebar-close-btn" id="sidebarCloseBtn">×</button>
+            </div>
+
+            <section class="profile-card">
+                <span class="profile-avatar" id="profileAvatar">FA</span>
+                <div>
+                    <h2 id="currentUsername">User</h2>
+                    <p><span class="status-dot online"></span>Online now</p>
+                </div>
+            </section>
+
+            <section class="sidebar-section">
+                <h3>Private Chat</h3>
+                <div class="chat-list" id="userList"></div>
+            </section>
+
+            <section class="sidebar-section">
+                <h3>Group Rooms</h3>
+                <div class="chat-list" id="roomList"></div>
+            </section>
+        </aside>
+
+        <section class="chat-main">
+            <header class="chat-header">
+                <button class="menu-btn" id="menuBtn">☰</button>
+
+                <div>
+                    <p class="eyebrow" id="activeChatType">Private Chat</p>
+                    <h2 id="activeChatName">Select a chat</h2>
+                    <p class="chat-subtitle" id="activeChatSubtitle">Choose a conversation from the sidebar.</p>
+                </div>
+            </header>
+
+            <section class="messages-area" id="messagesArea">
+                <div class="empty-state">
+                    <h2>Choose a user or room</h2>
+                    <p>Your messages will appear here in real time.</p>
+                </div>
+            </section>
+
+            <p class="typing-indicator hidden" id="typingIndicator">Someone is typing...</p>
+
+            <form class="message-form" id="messageForm">
+                <input 
+                    type="text" 
+                    id="messageInput" 
+                    placeholder="Type your message..."
+                    autocomplete="off"
+                >
+                <button type="submit">Send</button>
+            </form>
+        </section>
+    </main>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

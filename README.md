@@ -8,7 +8,7 @@ This project was developed as part of a Frontend Development Internship task and
 
 ## Live Demo
 
-Coming Soon (Render Deployment)
+https://nexsoft-chat-application-socketio.onrender.com/
 
 ```text
 https://your-render-url.onrender.com

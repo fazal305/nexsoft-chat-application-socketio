@@ -387,7 +387,6 @@ function hideTypingIndicator() {
 }
 
 // Render single message
-// Render single message
 function renderMessage(messageData) {
   const messageRow = document.createElement("div");
   const isMyMessage = messageData.senderId === currentUser.userId;
@@ -408,6 +407,21 @@ function renderMessage(messageData) {
 
   messagesArea.appendChild(messageRow);
   scrollToLatestMessage();
+}
+
+// Update delivery status for a message that is already visible.
+function updateMessageStatus(statusData) {
+  const messageRow = document.querySelector(`[data-message-id="${statusData.messageId}"]`);
+
+  if (!messageRow) {
+    return;
+  }
+
+  const statusText = messageRow.querySelector(".message-status");
+
+  if (statusText) {
+    statusText.textContent = statusData.status;
+  }
 }
 
 // Escape message text
@@ -460,7 +474,7 @@ function sendMessage(event) {
 
 // Handle incoming message
 function handleIncomingMessage(messageData) {
-  if (!currentUser || messageData.senderId === currentUser.userId) {
+  if (!currentUser) {
     return;
   }
 

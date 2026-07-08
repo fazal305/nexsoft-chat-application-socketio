@@ -1,15 +1,15 @@
 node_modules/
+npm-debug.log*
+
+.env
+.env.local
 
 firebase-service-account.json
 
-.env
-
-.vscode/
-
 .DS_Store
-
 Thumbs.db
+Desktop.ini
 
-npm-debug.log
-
-yarn-error.log
+*.log
+*.tmp
+*.bak

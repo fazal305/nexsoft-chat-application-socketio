@@ -17,6 +17,9 @@ const messageForm = document.getElementById("messageForm");
 const messageInput = document.getElementById("messageInput");
 const currentUsername = document.getElementById("currentUsername");
 const profileAvatar = document.getElementById("profileAvatar");
+const connectionBanner = document.getElementById("connectionBanner");
+const sendBtn = document.getElementById("sendBtn");
+const inputHint = document.getElementById("inputHint");
 
 const testUsers = [
   {
@@ -407,6 +410,10 @@ function renderMessage(messageData) {
 
   messagesArea.appendChild(messageRow);
   scrollToLatestMessage();
+
+  if (isMyMessage) {
+    flashSentStatus(messageRow);
+  }
 }
 
 // Update delivery status for a message that is already visible.
@@ -446,13 +453,25 @@ function scrollToLatestMessage() {
   messagesArea.scrollTop = messagesArea.scrollHeight;
 }
 
+// Reflects whether the message input has real content to send
+function updateSendButtonState() {
+  const hasText = messageInput.value.trim().length > 0;
+  sendBtn.disabled = !hasText;
+  inputHint.classList.add("hidden");
+}
+
 // Send message
 function sendMessage(event) {
   event.preventDefault();
 
   const messageText = messageInput.value.trim();
 
-  if (!messageText || !activeChat || !currentUser) {
+  if (!messageText) {
+    inputHint.classList.remove("hidden");
+    return;
+  }
+
+  if (!activeChat || !currentUser) {
     return;
   }
 
@@ -470,6 +489,37 @@ function sendMessage(event) {
   socket.emit("send-message", messageData);
 
   messageInput.value = "";
+  updateSendButtonState();
+}
+
+// Briefly flashes a message's status text to confirm it was sent
+function flashSentStatus(messageRow) {
+  const statusText = messageRow.querySelector(".message-status");
+
+  if (!statusText) {
+    return;
+  }
+
+  statusText.classList.add("sent-flash");
+  setTimeout(function () {
+    statusText.classList.remove("sent-flash");
+  }, 1200);
+}
+
+// Reflects live socket connection state in the top banner
+function updateConnectionBanner(state) {
+  if (state === "connected") {
+    connectionBanner.classList.add("hidden");
+    connectionBanner.classList.remove("offline");
+    return;
+  }
+
+  connectionBanner.textContent =
+    state === "connecting"
+      ? "Connecting..."
+      : "Connection lost — trying to reconnect...";
+  connectionBanner.classList.toggle("offline", state === "disconnected");
+  connectionBanner.classList.remove("hidden");
 }
 
 // Handle incoming message
@@ -490,11 +540,25 @@ function handleIncomingMessage(messageData) {
 // Initialize app
 function initializeApp() {
   renderLoginUsers();
+  updateSendButtonState();
+  updateConnectionBanner(socket.connected ? "connected" : "connecting");
 
   menuBtn.addEventListener("click", toggleSidebar);
   sidebarCloseBtn.addEventListener("click", toggleSidebar);
   messageForm.addEventListener("submit", sendMessage);
-  messageInput.addEventListener("input", startTyping);
+  messageInput.addEventListener("input", function () {
+    updateSendButtonState();
+    startTyping();
+  });
+  socket.on("connect", function () {
+    updateConnectionBanner("connected");
+  });
+  socket.on("disconnect", function () {
+    updateConnectionBanner("disconnected");
+  });
+  socket.io.on("reconnect_attempt", function () {
+    updateConnectionBanner("connecting");
+  });
   socket.on("message-status-updated", updateMessageStatus);
   socket.on("online-users-updated", function (users) {
     onlineUsers = users;

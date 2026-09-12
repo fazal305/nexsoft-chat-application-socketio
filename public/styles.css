@@ -51,6 +51,41 @@ button {
   display: none !important;
 }
 
+.connection-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  margin: 0;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #fff;
+  background: #6b7280;
+}
+
+.connection-banner.offline {
+  background: #b91c1c;
+}
+
+.input-hint {
+  margin: 0.35rem 0 0;
+  padding: 0 0.25rem;
+  font-size: 0.8rem;
+  color: #b91c1c;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.message-status.sent-flash {
+  color: #16a34a;
+  font-weight: 600;
+}
+
 .sr-only {
   width: 1px;
   height: 1px;

@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <p class="connection-banner hidden" id="connectionBanner"></p>
+
     <section class="login-screen" id="loginScreen">
       <div class="login-card">
         <p class="eyebrow">Nexsoft Socket.IO Project</p>
@@ -100,8 +102,11 @@
             placeholder="Type your message..."
             autocomplete="off"
           />
-          <button type="submit">Send</button>
+          <button type="submit" id="sendBtn" disabled>Send</button>
         </form>
+        <p class="input-hint hidden" id="inputHint">
+          Type a message before sending.
+        </p>
       </section>
     </main>
 

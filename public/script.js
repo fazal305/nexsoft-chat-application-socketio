@@ -70,7 +70,6 @@ let unreadCounts = {};
 let typingTimer = null;
 let isTyping = false;
 
-// Render login users
 function renderLoginUsers() {
   loginUsers.innerHTML = "";
 
@@ -91,7 +90,6 @@ function renderLoginUsers() {
   });
 }
 
-// Login selected user
 function loginUser(user) {
   currentUser = {
     userId: user.userId,
@@ -110,7 +108,6 @@ function loginUser(user) {
   renderRooms();
 }
 
-// Create initials
 function createInitials(name) {
   return name
     .split(" ")
@@ -122,41 +119,34 @@ function createInitials(name) {
     .toUpperCase();
 }
 
-// Sidebar toggle
 function toggleSidebar() {
   chatSidebar.classList.toggle("show-sidebar");
 }
 
-// Create stable private chat ID
 function createPrivateChatId(firstUserId, secondUserId) {
   return `private_${[firstUserId, secondUserId].sort().join("_")}`;
 }
 
-// Create stable group chat ID
 function createGroupChatId(roomId) {
   return `group_${roomId}`;
 }
 
-// Get unread count by chat
 function getUnreadCount(chatId) {
   return unreadCounts[chatId] || 0;
 }
 
-// Clear unread count by chat
 function clearUnreadCount(chatId) {
   unreadCounts[chatId] = 0;
   renderUsers();
   renderRooms();
 }
 
-// Add unread count by chat
 function addUnreadCount(chatId) {
   unreadCounts[chatId] = getUnreadCount(chatId) + 1;
   renderUsers();
   renderRooms();
 }
 
-// Render sidebar users
 function renderUsers() {
   userList.innerHTML = "";
 
@@ -199,7 +189,6 @@ function renderUsers() {
     });
 }
 
-// Render sidebar rooms
 function renderRooms() {
   roomList.innerHTML = "";
 
@@ -236,7 +225,6 @@ function renderRooms() {
   });
 }
 
-// Open private chat
 function openPrivateChat(user) {
   leaveCurrentGroupRoom();
   stopTyping();
@@ -270,7 +258,6 @@ function openPrivateChat(user) {
   chatSidebar.classList.remove("show-sidebar");
 }
 
-// Open group chat
 function openGroupChat(room) {
   leaveCurrentGroupRoom();
   stopTyping();
@@ -303,14 +290,12 @@ function openGroupChat(room) {
   chatSidebar.classList.remove("show-sidebar");
 }
 
-// Leave current group room
 function leaveCurrentGroupRoom() {
   if (activeChat && activeChat.type === "group") {
     socket.emit("leave-room", activeChat.id);
   }
 }
 
-// Update active room subtitle
 function updateActiveRoomSubtitle(roomId) {
   const activeRoomUsers = roomUsers[roomId] || [];
   const usernames = activeRoomUsers.map(function (user) {
@@ -325,7 +310,6 @@ function updateActiveRoomSubtitle(roomId) {
   activeChatSubtitle.textContent = `${usernames.length} active: ${usernames.join(", ")}`;
 }
 
-// Create typing data
 function createTypingData() {
   if (!activeChat || !currentUser) {
     return null;
@@ -341,7 +325,6 @@ function createTypingData() {
   };
 }
 
-// Start typing
 function startTyping() {
   const typingData = createTypingData();
 
@@ -361,7 +344,6 @@ function startTyping() {
   }, 900);
 }
 
-// Stop typing
 function stopTyping() {
   const typingData = createTypingData();
 
@@ -373,7 +355,6 @@ function stopTyping() {
   socket.emit("typing-stopped", typingData);
 }
 
-// Show typing indicator
 function showTypingIndicator(typingData) {
   if (!activeChat || typingData.chatId !== activeChat.chatId) {
     return;
@@ -383,13 +364,11 @@ function showTypingIndicator(typingData) {
   typingIndicator.classList.remove("hidden");
 }
 
-// Hide typing indicator
 function hideTypingIndicator() {
   typingIndicator.classList.add("hidden");
   typingIndicator.textContent = "";
 }
 
-// Render single message
 function renderMessage(messageData) {
   const messageRow = document.createElement("div");
   const isMyMessage = messageData.senderId === currentUser.userId;
@@ -418,7 +397,9 @@ function renderMessage(messageData) {
 
 // Update delivery status for a message that is already visible.
 function updateMessageStatus(statusData) {
-  const messageRow = document.querySelector(`[data-message-id="${statusData.messageId}"]`);
+  const messageRow = document.querySelector(
+    `[data-message-id="${statusData.messageId}"]`,
+  );
 
   if (!messageRow) {
     return;
@@ -431,14 +412,12 @@ function updateMessageStatus(statusData) {
   }
 }
 
-// Escape message text
 function escapeHtml(text) {
   const temporaryElement = document.createElement("div");
   temporaryElement.textContent = text;
   return temporaryElement.innerHTML;
 }
 
-// Format timestamp
 function formatMessageTime(timestamp) {
   const messageDate = timestamp ? new Date(timestamp) : new Date();
 
@@ -448,7 +427,6 @@ function formatMessageTime(timestamp) {
   });
 }
 
-// Scroll messages
 function scrollToLatestMessage() {
   messagesArea.scrollTop = messagesArea.scrollHeight;
 }
@@ -460,7 +438,6 @@ function updateSendButtonState() {
   inputHint.classList.add("hidden");
 }
 
-// Send message
 function sendMessage(event) {
   event.preventDefault();
 
@@ -522,7 +499,6 @@ function updateConnectionBanner(state) {
   connectionBanner.classList.remove("hidden");
 }
 
-// Handle incoming message
 function handleIncomingMessage(messageData) {
   if (!currentUser) {
     return;
@@ -537,7 +513,6 @@ function handleIncomingMessage(messageData) {
   addUnreadCount(messageData.chatId);
 }
 
-// Initialize app
 function initializeApp() {
   renderLoginUsers();
   updateSendButtonState();

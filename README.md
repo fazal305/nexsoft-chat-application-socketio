@@ -139,7 +139,7 @@ Runs the development server with `nodemon server/index.js`.
 Fazal Abbas
 
 - GitHub: https://github.com/fazal305
-- LinkedIn: https://www.linkedin.com/in/fazal-abbas-4653dg86
+- LinkedIn: https://www.linkedin.com/in/fazal-abbas879/
 
 ## License
 
